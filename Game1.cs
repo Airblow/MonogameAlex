@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -10,10 +11,14 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
 
     Player player;
+    Enemy enemy;
+
+    List<BaseClass> entities = new List<BaseClass>();
+
     Texture2D pixel;
 
     public Game1()
-    {
+    { 
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -33,6 +38,10 @@ public class Game1 : Game
         pixel.SetData(new Color[]{Color.White});
 
         player = new Player(pixel);
+        enemy = new Enemy(pixel, new Vector2(400,10));
+
+        entities.Add(player);
+        entities.Add(enemy);
         // TODO: use this.Content to load your game content here
     }
 
@@ -41,8 +50,8 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
         player.Update();
+        enemy.Update();
 
         base.Update(gameTime);
     }
@@ -51,10 +60,9 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your drawing code here
-        
         _spriteBatch.Begin();
         player.Draw(_spriteBatch);
+        enemy.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);
